@@ -9,10 +9,73 @@
     isCyclicalGraph test<br />
     Test/View coverage using Chrome coverage tool<br/>
     View pass/fail using js console
-    <script>window.runIsCyclicalGraphUnitTest = true</script>
     <script type="module">
       // TODO: Ctrl+Click not working on below in VS Code!!!
-      import * as icg from "./iscyclicalgraph.js";
+      import {setIsCyclicalGraphConfig, isCyclicalGraph} from "./iscyclicalgraph.js";
+      
+      function assert(x){if(!x){throw new Error('assertion failed!');}}
+      
+        console.log("unitTest(): Entry");
+  /*
+      Simple graph as follows:
+      4->2->1
+      |__3_|
+  */
+  const configFn1 = /* getAllNodesArrangedFromFrontToBackFn = */ () =>
+    new Set([1, 2, 3, 4]);
+  const configFn2 = /* getNodesTakingInputFromFn = */ (node) => {
+    assert([1, 2, 3, 4].includes(node));
+    switch (node) {
+      case 1:
+        return new Set();
+      case 2:
+        return new Set([1]);
+      case 3:
+        return new Set([1]);
+      case 4:
+        return new Set([2, 3]);
+    }
+  };
+  setIsCyclicalGraphConfig(configFn1, configFn2);
+  assert(!isCyclicalGraph());
+
+  setIsCyclicalGraphConfig(
+    // test a different coverage, note that ordering of
+    // getAllNodesArrangedFromFrontToBackFn is not expected to be guaranteed:
+    () => new Set([4, 2, 3, 1]),
+    configFn2
+  );
+  assert(!isCyclicalGraph());
+
+  setIsCyclicalGraphConfig(
+    /* getAllNodesArrangedFromFrontToBackFn = */ () => new Set([1]),
+    /* getNodesTakingInputFromFn = */ (node) => {
+      assert([1].includes(node));
+      return new Set([1]);
+    }
+  );
+  assert(isCyclicalGraph());
+
+  /*
+      Simple graph as follows:
+      4->2->1┓
+      └--3<---
+     */
+  const configFn3 = /* getNodesTakingInputFromFn = */ (node) => {
+    assert([1, 2, 3, 4].includes(node));
+    switch (node) {
+      case 1:
+        return new Set([3]);
+      case 2:
+        return new Set([1]);
+      case 3:
+        return new Set([4]);
+      case 4:
+        return new Set([2]);
+    }
+  };
+  setIsCyclicalGraphConfig(configFn1, configFn3);
+  assert(isCyclicalGraph());
     </script>
   </body>
 </html>
