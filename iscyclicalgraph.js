@@ -1,8 +1,5 @@
 // to check code coverage, use isCyclicalGraph.html and coverage tool of Chrome
 
-let getAllNodesArrangedFromFrontToBack;
-let getNodesTakingInputFrom;
-
 /**
  * @param getAllNodesArrangedFromFrontToBackFn must return a set
  * @param getNodesTakingInputFromFn must return a set
@@ -56,3 +53,6 @@ function isCyclicalNode(node, nodesConfirmedToBeACyclic) {
   }
   return false;
 }
+
+let getAllNodesArrangedFromFrontToBack;
+let getNodesTakingInputFrom;
