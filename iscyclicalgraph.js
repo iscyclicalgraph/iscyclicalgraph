@@ -1,7 +1,5 @@
 // to check code coverage, use isCyclicalGraph.html and coverage tool of Chrome
 
-import { assert } from "https://asserta19.github.io/assert/assert.js";
-
 let getAllNodesArrangedFromFrontToBack;
 let getNodesTakingInputFrom;
 
